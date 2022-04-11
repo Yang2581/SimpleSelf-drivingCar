@@ -1,4 +1,4 @@
-This tiny project build a simple self-driving car environment with python, the vehicle dynamic was derivated from [techwithtim/Pygame-Car-Racer: Make a racing game in Python using pygame! (github.com)](https://github.com/techwithtim/Pygame-Car-Racer). You could also check the videos in his **Youtube** channel for more details.
+This tiny project build a simple self-driving car environment with python, the vehicle dynamic was derivated from [techwithtim/Pygame-Car-Racer: Make a racing game in Python using pygame! (github.com)](https://github.com/techwithtim/Pygame-Car-Racer). You could also check the videos in his **Youtube** channel for more details[(25) Pygame Car Racing Tutorial #1 - Moving The Car - YouTube](https://www.youtube.com/watch?v=L3ktUWfAMPg).
 
 Thanks to **techwithtim**😘
 
