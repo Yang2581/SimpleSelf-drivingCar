@@ -24,7 +24,7 @@ What's more, the position of the car relative to the centerline is determined by
 
 <img src="assets/image-20220411145925936.png" alt="image-20220411145925936" style="zoom: 80%;" />
 
-When $V \times U > 0$, then the transition from $V$ to $U$ is clockwise, and so on.
+When VxU>0, then the transition from V to U is clockwise, and so on.
 
 And, other related settings can be made in the dynamics file `autocar.py`, such as setting rewards in `ComputerCar.__get_rewards()`!
 
