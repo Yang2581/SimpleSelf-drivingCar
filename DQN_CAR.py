@@ -31,24 +31,28 @@ if __name__ == '__main__':
 
     # TODO:load the agent network weights
     #################################
-    # agent.Q_next.load_state_dict(torch.load('weight1.pt'))
-    # agent.Q_eval.load_state_dict(torch.load('weight1.pt'))
+    # agent.Q_eval.load_state_dict(torch.load('weight_eval.pt'))
+    # agent.Q_next.load_state_dict(torch.load('weight_next.pt'))
     #################################
 
     scores = []
     n_games = 1000
-
-
+    run = True
     for i in range(n_games):
         score = 0
         idx = 0
         done = False
         observation = env.reset()
-        clock.tick(FPS)
+
         while not done:
-
+            clock.tick(FPS)
             draw(WIN, images, env)
-
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    run = False
+                    break
+            if run != True:
+                break        
             action = agent.choose_action(observation)
             # print('  obs: ' + str(observation))
             observation_, reward, done = env.step(action)
@@ -67,10 +71,12 @@ if __name__ == '__main__':
             pass
             # TODO: save the trained network weights
             ######################################
-            # torch.save(agent.Q_eval.state_dict(), 'weight1.pt')
+            # torch.save(agent.Q_eval.state_dict(), 'weight_eval.pt')
+            # torch.save(agent.Q_next.state_dict(), 'weight_next.pt')
             # agent.memory.save_buffer('buffer')
             ######################################
-
+        if run != True:
+            break
         # scores.append(score)
 
         # avg_score = np.mean(scores[-100:])
