@@ -78,7 +78,7 @@ class Agent:
         rewards = T.tensor(rewards).to(self.Q_eval.device)
         dones = T.tensor(dones).to(self.Q_eval.device)
         q_eval = self.Q_eval.forward(states)[batch_index, actions]
-        q_next = self.Q_eval.forward(new_states)
+        q_next = self.Q_next.forward(new_states)
         q_next[dones] = 0.0
         q_target = rewards + self.gamma*T.max(q_next, dim=1)[0]
 
