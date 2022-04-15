@@ -183,7 +183,7 @@ class ComputerCar(AbstractCar):
         ddist = dist_1 - dist_0
         dist_reward = abs(ddist)*math.exp(0.2 * 1/(diff+1))
         rewards = -dev*0.15 - 0.01*diff - 1/(ddist*10+200)
-
+        # TODO: configurate the reward
         if is_collided:
             rewards = rewards - 2000
 
