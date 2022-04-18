@@ -14,19 +14,18 @@ if __name__ == '__main__':
     combined = False
     buffer_size = 50000
 
-# TODO: fine tune the parameters
-# -------------------------------
-# gamma: discount factor
-# epsilon: random exploration
-# batch_size: 
-# n_actions: number of action space
-# input_dims: number of state space
-# lr: learning rate
-# max_mem_size: size of replay buffer
-
+    # TODO: fine tune the parameters
+    # -------------------------------
+    # gamma: discount factor
+    # epsilon: random exploration
+    # batch_size:
+    # n_actions: number of action space
+    # input_dims: number of state space
+    # lr: learning rate
+    # max_mem_size: size of replay buffer
 
     agent = Agent(gamma=0.95, epsilon=0.10, batch_size=100, n_actions=2,
-                  eps_end=0.1, input_dims=4, lr=0.001,
+                  eps_end=0.1, input_dims=3, lr=0.001,
                   max_mem_size=buffer_size, combined=combined)
 
     # TODO:load the agent network weights
@@ -43,6 +42,13 @@ if __name__ == '__main__':
         idx = 0
         done = False
         observation = env.reset()
+
+        '''
+        observation
+        1. beta: sideslip angle (the angle between heading angle of the car and the center line)
+        2. deviation: deviation between car and center line
+        3. direction: check the car's direction from the center line(1 for left and -1 right) 
+        '''
 
         while not done:
             clock.tick(FPS)
@@ -81,6 +87,4 @@ if __name__ == '__main__':
 
         # avg_score = np.mean(scores[-100:])
 
-
     pygame.quit()
-
