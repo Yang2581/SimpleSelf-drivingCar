@@ -129,6 +129,7 @@ class ComputerCar(AbstractCar):
             self.idx = 0
         self.idx += 1
 
+        ########### calculate the deviation of the car from center line ###########
         A_x, A_y = self.path[self.current_point - 1]
         B_x, B_y = self.path[self.current_point]
         C_x = self.cx
@@ -154,10 +155,37 @@ class ComputerCar(AbstractCar):
         c = math.sqrt(dc_x**2 + dc_y**2)
         b = math.sqrt(db_x**2 + db_y**2)
         theta = math.acos((dc_x*db_x + dc_y*db_y)/(b*c))
-
         # deviation
         dev = abs(b*math.sin(theta))
-        return (x_diff, y_diff), dev, direction, theta
+        ##############################################################################
+        ############### calculate sideslip angle beta ##################
+        # angle between the Frenet and the ground
+        # let vector C to be the axis S of the Frenet
+        if dc_y != 0:
+            phi = math.atan(dc_x/dc_y)*180/math.pi
+            if dc_y < 0:
+                phi = phi
+            elif dc_x < 0:
+                phi = 180 - abs(phi)
+            else:
+                phi = -180 + abs(phi)
+        else:
+            if dc_x < 0:
+                phi = 90
+            else:
+                phi = -90
+
+        # beta = self.angle - phi
+        # print(phi, self.angle, dc_x,dc_y)
+        beta = self.angle - phi
+        if (beta > 180) or (beta < -180):
+            if phi >= 0:
+                beta = 360 - abs(beta)
+            else:
+                beta = abs(beta) - 360
+        #################################################################
+
+        return beta, dev, direction
 
     # define the environment rewards
     def __get_rewards(self):
@@ -172,18 +200,20 @@ class ComputerCar(AbstractCar):
             is_collided = 0
             self.is_collide = False
 
-        dist, dev, direction, theta = self.__calculate_dist()
-        x_diff = dist[0]
-        y_diff = dist[1]
-        diff = math.sqrt(x_diff ** 2 + y_diff ** 2)
+        beta, dev, direction = self.__calculate_dist()
 
         dist_0 = math.sqrt(self.dist_ls[0][0] ** 2 + self.dist_ls[0][1] ** 2)
         dist_1 = math.sqrt(self.dist_ls[1][0] ** 2 + self.dist_ls[1][1] ** 2)
 
-        ddist = dist_1 - dist_0
-        dist_reward = abs(ddist)*math.exp(0.2 * 1/(diff+1))
-        rewards = -dev*0.15 - 0.01*diff - 1/(ddist*10+200)
+        ddist = dist_1 - dist_0 # check that is the car moving
+
         # TODO: configurate the reward
+        if dev < 2:
+            rewards = dev * 0.3 - 0.05 * abs(beta) - 1 / (ddist * 10 + 200)
+        else:
+            rewards = -dev * 0.3 - 0.05 * abs(beta) - 1 / (ddist * 10 + 200)
+
+
         if is_collided:
             rewards = rewards - 2000
 
@@ -195,7 +225,7 @@ class ComputerCar(AbstractCar):
 
         if self.is_finished:
             rewards = 100000
-        return rewards, diff, dev, direction, theta
+        return rewards, beta, dev, direction
 
     def step(self, keys):
         moved = False
@@ -220,7 +250,7 @@ class ComputerCar(AbstractCar):
 
         self.__handle_collision()
 
-        reward, diff, dev, direction, theta= self.__get_rewards()
+        reward, beta, dev, direction= self.__get_rewards()
         self.cumulated_rewards += reward
 
         if self.cumulated_rewards < -1000:
@@ -234,7 +264,7 @@ class ComputerCar(AbstractCar):
 
         # print(self.__sensor(34,24,4))
         # print('reward: ' + str(self.__get_rewards()))
-        return ([0.02*diff, 0.2*dev, direction, theta], reward, done)
+        return ([beta, dev, direction], reward, done)
 
     def __handle_collision(self):
         if self.collide(TRACK_BORDER_MASK) != None:
@@ -299,7 +329,7 @@ class ComputerCar(AbstractCar):
         self.current_point = 0
         self.cumulated_rewards = 0
         super().reset()
-        return np.array([0, 0, 0, 0])
+        return np.array([0, 0, 0])
 
 
 def draw(win, images, player_car):
