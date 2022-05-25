@@ -16,9 +16,9 @@ Run `DQN_CAR.py`, you could run a car with a simple DQN agent.
 
 ![image-20220411145042724](assets/image-20220411145042724.png)
 
-<img src="assets/image-20220411145058701.png" alt="image-20220411145058701" style="zoom:80%;" />
+![](assets/2022-05-09-16-37-26-image.png)
 
-According to the cosine theorem , the offset and angle of the car relative to the midline of the two points can be found.
+According to the cosine theorem , the offset and angle (so we choose angle β, side slip angle maybe, as one of our states) of the car relative to the midline of the two points could be found.
 
 What's more, the position of the car relative to the centerline is determined by the cross product of the three-dimensional vector (left and right)
 
@@ -31,8 +31,6 @@ And, other related settings can be made in the dynamics file `autocar.py`, such 
 If you like this project, click on the star😁😁😁!
 
 ---
-
-
 
 本项目通过python构建了一个简单的自动驾驶车辆环境，车辆动力学灵感来自于[techwithtim/Pygame-Car-Racer: Make a racing game in Python using pygame! (github.com)](https://github.com/techwithtim/Pygame-Car-Racer)，您也可以在YouTube上敢看他的视频进行学习：[(25) Pygame Car Racing Tutorial #1 - Moving The Car - YouTube](https://www.youtube.com/watch?v=L3ktUWfAMPg)
 
@@ -52,9 +50,9 @@ pip install -r requirements.txt
 
 ![image-20220411145042724](assets/image-20220411145042724.png)
 
-<img src="assets/image-20220411145058701.png" alt="image-20220411145058701" style="zoom:80%;" />
+![](assets/2022-05-09-16-40-06-image.png)
 
-根据余弦定理，可以求得小车相对于两点构成的中线的偏移量与夹角。
+根据余弦定理，可以求得小车相对于两点构成的中线的偏移量与夹角(我们选取质心侧偏角β角作为状态之一)。
 
 并且，通过三维向量的叉乘判断小车相对于中线的位置（左、右）
 
@@ -65,4 +63,3 @@ pip install -r requirements.txt
 并且，可以在动力学文件`autocar.py`中进行其他相关设置，比如在`ComputerCar.__get_rewards()`中设置奖励！
 
 如果您喜欢这个项目，点击star收藏！😁😁😁
-
