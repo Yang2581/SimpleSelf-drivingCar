@@ -43,6 +43,7 @@ class AbstractCar:
         self.angle = 0
         self.x, self.y = self.START_POS
         self.acceleration = 0.1
+        
 
     def rotate(self, left=False, right=False):
         if left:
@@ -113,6 +114,8 @@ class ComputerCar(AbstractCar):
         self.idx = 0
         self.dist_ls = [[0,0],[0,0]]
 
+        self.direc = 0 # for pid control
+
     def __calculate_x_y(self):
         self.cx = self.x + self.img.get_width() / 2
         self.cy = self.y + self.img.get_height() / 2
@@ -150,6 +153,7 @@ class ComputerCar(AbstractCar):
             direction = 0
         else:
             direction = -1
+        self.direc = direction
 
         # angle of vector b and c
         c = math.sqrt(dc_x**2 + dc_y**2)
@@ -277,6 +281,7 @@ class ComputerCar(AbstractCar):
                 self.bounce()
             else:
                 self.reset()
+                self.is_finished = True
 
     def reduce_speed(self):
         self.vel = max(self.vel - self.acceleration / 2, 0)
@@ -326,6 +331,7 @@ class ComputerCar(AbstractCar):
         super().move()
 
     def reset(self):
+        self.is_finished = False
         self.current_point = 0
         self.cumulated_rewards = 0
         super().reset()
